@@ -17,6 +17,8 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",
     "vite": "^4.3.9",
-    "volar-service-vetur": "latest"
+    "volar-service-vetur": "latest",
+    "vue-loader": "^17.2.2",
+    "vue-template-compiler": "^2.7.14"
   }
 }

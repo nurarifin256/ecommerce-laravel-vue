@@ -7,6 +7,7 @@ use App\Http\Requests\AuthRequest;
 use App\Http\Resources\AuthResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\Exceptions\TokenNotFoundException;
 

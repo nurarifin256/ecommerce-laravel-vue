@@ -1,12 +1,27 @@
 <script setup>
-import Navbar from './views/layouts/Navbar.vue';
-import Sidebar from './views/layouts/Sidebar.vue';
-import Footer from './views/layouts/Footer.vue';
+// import Navbar from './views/layouts/Navbar.vue';
+// import Sidebar from './views/layouts/Sidebar.vue';
+// import Footer from './views/layouts/Footer.vue';
+
+import { ref, onMounted } from "vue";
+
+const user = ref("");
+
+onMounted(() => {
+    showLocalStorageContent()
+})
+
+const showLocalStorageContent = () => {
+    user.value = localStorage.getItem('user')
+};
+
+console.log(showLocalStorageContent);
+
 </script>
 <template>
     <div>
-        <Navbar />
-        <Sidebar />
+        <!-- <Navbar />
+        <Sidebar /> -->
 
         <div class="content-wrapper">
             <section class="content-header">
@@ -60,6 +75,6 @@ import Footer from './views/layouts/Footer.vue';
             </section>
         </div>
 
-        <Footer />
+        <!-- <Footer /> -->
     </div>
 </template>

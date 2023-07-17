@@ -27,7 +27,7 @@ class AuthResource extends JsonResource
     {
         return [
             'status' => $this->status,
-            'mesage' => $this->message,
+            'message' => $this->message,
             'data'   => $this->resource,
         ];
     }

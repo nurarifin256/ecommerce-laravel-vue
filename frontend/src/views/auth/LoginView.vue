@@ -1,34 +1,32 @@
 <script setup>
 import { ref } from "vue";
-import api from "../../api"
 import { useRouter } from 'vue-router';
+import { loginUser } from '../../hook/authHook'
 
 const router = useRouter();
 
-const email = ref("")
-const password = ref("")
-const errEmailOrPassword = ref("")
+const formData = ref({
+    email: "",
+    password: "",
+});
 const errors = ref([]);
+const errEmailOrPassword = ref("")
 
 const login = async () => {
     try {
-        let formData = new FormData();
-        formData.append("email", email.value)
-        formData.append("password", password.value)
+        const response = await loginUser(formData.value);
 
-        await api.post('/api/auth/login', formData)
-            .then((res) => {
-                if (res.data.message == "Wrong email or password") {
-                    errEmailOrPassword.value = res.data.message
-                }
-                localStorage.setItem('user', JSON.stringify(res.data.data))
-                router.push({ path: "/dashboard" })
-            })
-            .catch((err) => {
-                if (err.response) {
-                    errors.value = err.response.data.errors;
-                }
-            })
+        if (response.error) {
+            if (response.message === "Wrong email or password") {
+                errors.value = []
+                errEmailOrPassword.value = response.message;
+            } else {
+                errEmailOrPassword.value = ""
+                errors.value = response.message;
+            }
+            return false;
+        }
+        router.push({ path: "/dashboard" });
 
     } catch (error) {
         console.log(error);
@@ -51,7 +49,7 @@ const login = async () => {
                     </div>
                     <form @submit.prevent="login()">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" v-model="email" placeholder="email">
+                            <input type="text" class="form-control" v-model="formData.email" placeholder="email">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-envelope"></span>
@@ -62,7 +60,7 @@ const login = async () => {
                             <span>{{ errors.email[0] }}</span>
                         </div>
                         <div class="input-group mb-3">
-                            <input type="password" class="form-control" v-model="password" placeholder="Password"
+                            <input type="password" class="form-control" v-model="formData.password" placeholder="Password"
                                 autocomplete="off">
                             <div class="input-group-append">
                                 <div class="input-group-text">

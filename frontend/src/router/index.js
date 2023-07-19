@@ -1,6 +1,8 @@
 /** @format */
 
 import { createRouter, createWebHistory } from "vue-router";
+import requireAuth from "./requireAuth";
+
 const routes = [
   {
     path: "/",
@@ -11,6 +13,13 @@ const routes = [
     path: "/dashboard",
     name: "dashboard",
     component: () => import("../views/DashboardView.vue"),
+    beforeEnter: requireAuth,
+  },
+  {
+    path: "/barang",
+    name: "barang",
+    component: () => import("../views/barang/BarangView.vue"),
+    beforeEnter: requireAuth,
   },
 ];
 

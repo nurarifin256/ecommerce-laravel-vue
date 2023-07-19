@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
-import { useRouter } from 'vue-router';
 import api from "../../api"
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
@@ -21,7 +21,7 @@ const login = async () => {
                 if (res.data.message == "Wrong email or password") {
                     errEmailOrPassword.value = res.data.message
                 }
-                localStorage.setItem('user', res.data.data)
+                localStorage.setItem('user', JSON.stringify(res.data.data))
                 router.push({ path: "/dashboard" })
             })
             .catch((err) => {
@@ -62,7 +62,8 @@ const login = async () => {
                             <span>{{ errors.email[0] }}</span>
                         </div>
                         <div class="input-group mb-3">
-                            <input type="password" class="form-control" v-model="password" placeholder="Password">
+                            <input type="password" class="form-control" v-model="password" placeholder="Password"
+                                autocomplete="off">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-lock"></span>

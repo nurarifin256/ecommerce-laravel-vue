@@ -4,7 +4,7 @@ import Sidebar from '../views/layouts/Sidebar.vue';
 import Footer from '../views/layouts/Footer.vue';
 
 
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 
 const user = ref("");
 

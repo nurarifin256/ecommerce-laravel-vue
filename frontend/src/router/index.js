@@ -21,6 +21,12 @@ const routes = [
     component: () => import("../views/barang/BarangView.vue"),
     beforeEnter: requireAuth,
   },
+  {
+    path: "/baran",
+    name: "baran",
+    component: () => import("../views/barang/baranView.vue"),
+    beforeEnter: requireAuth,
+  },
 ];
 
 const router = createRouter({

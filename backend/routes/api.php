@@ -24,6 +24,7 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::get('/inventory/barang', [BarangController::class, 'getBarangs']);
+Route::post('/inventory/list', [BarangController::class, 'data_list']);
 Route::get('/inventory/barang/search', [BarangController::class, 'search']);
 Route::get('/inventory', [BarangController::class, 'index']);
 

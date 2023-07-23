@@ -24,14 +24,16 @@ DataTable.use(DataTablesCore);
 
 const barang = ref([]);
 const currentPage = ref(1);
+const totalPages = ref(0);
 
 const fetchDataBarang = async () => {
 
-    await api.get(`/api/inventory?page=${currentPage}`)
+    await api.get(`/api/inventory/barang?page=${currentPage}`)
 
         .then(response => {
-            console.log(response.data.data);
+            console.log('sini', response);
             barang.value = response.data.data.data;
+            totalPages.value = response.data.last_page;
 
         });
 }

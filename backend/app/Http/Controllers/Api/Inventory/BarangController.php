@@ -31,6 +31,16 @@ class BarangController extends Controller
         return $barangs;
     }
 
+    public function cari($seacrh)
+    {
+        $barangs = Barangs::where('name', 'LIKE', "%$seacrh%")
+            ->orWhere('price', 'LIKE', "%$seacrh%")
+            ->select('name', 'id', 'price')
+            ->get();
+
+        return response()->json($barangs);
+    }
+
     public function search(Request $request)
     {
         $keyword = $request->input('keyword');

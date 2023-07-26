@@ -6,6 +6,7 @@ import "admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"
 import "admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"
 import "admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css"
 
+
 import "admin-lte/plugins/datatables/jquery.dataTables.min.mjs"
 import "admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.mjs"
 import "admin-lte/plugins/datatables-responsive/js/dataTables.responsive.min.mjs"
@@ -72,7 +73,6 @@ const tombol = [
 const fetchDataBarang = async () => {
     await api.get('/api/inventory/barang')
         .then(response => {
-            console.log(response);
             barangs.value = response.data;
 
         });

@@ -54,6 +54,9 @@ class BarangController extends Controller
 
     function data_list(Request $req)
     {
+        // try {
+        //code...
+
         $list      = $this->get_list($req);
         $data      = array();
         $no        = $req['start'];
@@ -84,6 +87,10 @@ class BarangController extends Controller
             "data"            => $data,
         );
         return response()->json($output);
+        // } catch (\Throwable $th) {
+        //     $pesan = 'error';
+        //     return response()->json($pesan);
+        // }
     }
 
     function get_list(Request $req)
@@ -101,7 +108,7 @@ class BarangController extends Controller
     function sql_list(Request $request)
     {
         $seacrh    = $request->search;
-        $where  = (strlen($seacrh) > 0) ? " AND A.name ILIKE '%$seacrh%'" : "";
+        $where  = (strlen($seacrh) > 0) ? " AND A.name ILIKE '%$seacrh%' OR A.price ILIKE '%$seacrh%'" : "";
         $sql = "(SELECT A.id, A.name, A.price 
                     FROM  barangs AS A 
                     WHERE 1=1

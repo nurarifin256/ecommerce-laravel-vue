@@ -52,6 +52,36 @@ class BarangController extends Controller
         return response()->json($users);
     }
 
+    public function getCategories()
+    {
+        // buat temp table di postgree
+        $sql = "CREATE TEMP TABLE categories(id INT, name VARCHAR, created_by VARCHAR);";
+        DB::connection('pgsql')->statement($sql);
+
+        // ambil data di sql server
+        $categories = DB::connection('sqlsrv2')->table('categories')->select('id', 'name', 'created_by')->get();
+
+        // tampung data dari sql server 
+        $insertData = [];
+        foreach ($categories as $category) {
+            $insertData[] = [
+                'id' => $category->id,
+                'name' => $category->name,
+                'created_by' => $category->created_by,
+            ];
+        }
+
+        // input data ke dalam temp table di postgree
+        DB::connection('pgsql')->table('categories')->insert($insertData);
+
+        // join data tabel temp  categories dengan tabel permanent barang
+        $data = DB::table('categories as C')
+            ->select('B.name AS nama_barang', 'C.name AS nama_category', 'C.created_by')
+            ->join('barangs as B', 'B.category_id', '=', 'C.id')
+            ->get();
+        return response()->json($data);
+    }
+
     function data_list(Request $req)
     {
         // try {

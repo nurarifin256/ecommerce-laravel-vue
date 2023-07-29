@@ -41,8 +41,9 @@ function reset() {
     // email.value = null
     // password.value = null
 
-    formData.email = null
-    formData.password = null
+    // formData.email = null
+    // formData.password = null
+    ref.formData.reset()
 }
 
 const email = ref('')

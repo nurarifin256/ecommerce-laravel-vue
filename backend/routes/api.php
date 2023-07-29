@@ -28,5 +28,6 @@ Route::get('/inventory/barang/cari/{search}', [BarangController::class, 'cari'])
 Route::post('/inventory/list', [BarangController::class, 'data_list']);
 Route::get('/inventory/barang/search', [BarangController::class, 'search']);
 Route::get('/inventory', [BarangController::class, 'index']);
+Route::get('/sql-server', [BarangController::class, 'getCategories']);
 
 Route::middleware('auth:sanctum')->post('/auth/logout', [AuthController::class, 'logout']);

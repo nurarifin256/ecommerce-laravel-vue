@@ -8,6 +8,7 @@ import api from "../../api"
 import _ from 'lodash';
 
 
+
 import "admin-lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css";
 import "admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"
 import "admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"
@@ -21,7 +22,8 @@ import "admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js"
 import "admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"
 import "admin-lte/plugins/datatables-buttons/js/buttons.print.min.js"
 import "admin-lte/plugins/datatables-buttons/js/buttons.colVis.min.js"
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { getBarangs } from "../../hook/barangHook";
 
 // import DataTable from 'datatables.net-vue3';
 // import DataTablesCore from 'datatables.net';
@@ -36,6 +38,10 @@ const initialState = {
 }
 
 const formData = ref(initialState)
+
+
+
+
 
 function reset() {
     // email.value = null
@@ -57,6 +63,15 @@ function tesData() {
         // formData.value = null
     }, 1500)
 }
+
+// const fetchBarangs = async () => {
+//     const response = await getBarangs()
+//     console.log(response);
+// }
+
+// onMounted(() => {
+//     fetchBarangs()
+// })
 
 const fetchOptions = async (search, loading) => {
     if (search.length > 2) {
@@ -144,7 +159,7 @@ $(function () {
         //     'copy',
         // ],
         "ajax": {
-            "url": "http://192.168.169.76:8000/api/inventory/list",
+            "url": "http://192.168.67.76:8000/api/inventory/list",
             "type": "POST",
             "data": function (data) {
                 data.search = $('#search').val()
@@ -168,10 +183,46 @@ $(function () {
 });
 
 const placeholderText = 'Pilih salah satu opsi...';
+
+import { useQuery } from "@tanstack/vue-query";
+
+const { data } = useQuery({
+    queryKey: ['barangs'],
+    queryFn: getBarangs,
+});
 </script>
 
 <template>
-    <div class="container mt-5">
+    <div v-if="data">
+        <ul>
+
+            <!-- syntax ini yang tampil hanya lenght nya saja -->
+            <li v-for="b in data" :key="b.id">{{ b.name }}</li>
+
+            <!-- syntax ini data tidak tampil -->
+            <li v-for="b in data.data" :key="b.id">{{ b.name }}</li>
+
+            <!-- syntax ini tampil, tapi semua field -->
+            {{ data }} <br>
+        </ul>
+    </div>
+</template>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6">
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 <div class="form-group">
@@ -252,8 +303,8 @@ const placeholderText = 'Pilih salah satu opsi...';
                     </div>
                 </div>
             </div>
-            <!-- <input type="email" class="form-control" id="exampleInputEmail1" v-model="email">
-            <input type="text" class="form-control" id="exampleInputPassword1" v-model="password"> -->
+            <input type="email" class="form-control" id="exampleInputEmail1" v-model="email">
+            <input type="text" class="form-control" id="exampleInputPassword1" v-model="password">
         </div>
-    </div>
-</template>
+    </div> -->
+<!-- </template> -->

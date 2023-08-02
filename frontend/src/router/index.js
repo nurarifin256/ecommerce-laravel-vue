@@ -33,6 +33,11 @@ const routes = [
     component: () => import("../views/barang/TableBarangView.vue"),
   },
   {
+    path: "/permisson",
+    name: "permission",
+    component: () => import("../views/permission/IndexView.vue"),
+  },
+  {
     path: "/baran",
     name: "baran",
     component: JlDatatable,

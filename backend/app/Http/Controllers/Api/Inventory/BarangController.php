@@ -28,7 +28,8 @@ class BarangController extends Controller
     public function getBarangs()
     {
         $barangs = Barangs::all();
-        return $barangs;
+
+        return response()->json(['data' => $barangs]);
     }
 
     public function cari($seacrh)
@@ -52,7 +53,7 @@ class BarangController extends Controller
         return response()->json($users);
     }
 
-    public function getCategories()
+    public function getCategories($id)
     {
         // buat temp table di postgree
         $sql = "CREATE TEMP TABLE categories(id INT, name VARCHAR, created_by VARCHAR);";
@@ -60,6 +61,9 @@ class BarangController extends Controller
 
         // ambil data di sql server
         $categories = DB::connection('sqlsrv2')->table('categories')->select('id', 'name', 'created_by')->get();
+
+        // return response()->json(['data' => $categories]);
+        // exit;
 
         // tampung data dari sql server 
         $insertData = [];
@@ -76,8 +80,9 @@ class BarangController extends Controller
 
         // join data tabel temp  categories dengan tabel permanent barang
         $data = DB::table('categories as C')
-            ->select('B.name AS nama_barang', 'C.name AS nama_category', 'C.created_by')
             ->join('barangs as B', 'B.category_id', '=', 'C.id')
+            ->select('B.name AS nama_barang', 'C.name AS nama_category', 'C.created_by')
+            ->where('C.id', $id)
             ->get();
         return response()->json($data);
     }

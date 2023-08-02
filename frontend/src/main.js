@@ -5,6 +5,7 @@ import router from "./router";
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import { VueQueryPlugin } from "@tanstack/vue-query";
 
 import "admin-lte/plugins/fontawesome-free/css/all.min.css";
 import "admin-lte/dist/css/adminlte.min.css?v=3.2.0";
@@ -16,6 +17,8 @@ import "admin-lte/dist/js/adminlte.min.js";
 const app = createApp(App);
 
 app.use(createPinia());
+
+app.use(VueQueryPlugin);
 
 app.use(router);
 

@@ -82,10 +82,41 @@ onMounted(() => {
     fetchDataBarang();
 });
 
+const myinput = ref(null);
+const myValue = ref(null);
+const myValue2 = ref('tes bosku')
+
+function submitData() {
+    myinput.value.focus()
+}
+
+function autoFocus() {
+    const length = myValue.value
+    if (length.length > 2) {
+        console.log(length);
+        myValue2.value = null
+        myinput.value.focus()
+
+    }
+}
+
 </script>
 
 <template>
     <div class="container mt-5">
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <input type="text" v-model="myValue" @keyup="autoFocus" class="form-control" name="search" id="search"
+                    autocomplete="off">
+
+            </div>
+        </div>
+        <div class="row mb-3">
+            <input type="text" ref="myinput" class="form-control" v-model="myValue2">
+            <button @click="submitData">Autofocus</button>
+        </div>
+
         <div class="row">
             <div class="table-responsive">
                 <DataTable :data="barangs" :columns="columns" class="table table-striped table-bordered display"

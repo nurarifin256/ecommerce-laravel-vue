@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from "vue"
 import api from "../../api"
+import JsonExcel from "vue-json-excel3";
 
 import "admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"
 import "admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"
@@ -78,27 +79,107 @@ const fetchDataBarang = async () => {
         });
 }
 
+const fetchData = async () => {
+    const response = await api.get('/api/inventory/barang')
+    console.log(response);
+    return response.data.data;
+}
+
 onMounted(() => {
     fetchDataBarang();
 });
 
-const myinput = ref(null);
-const myValue = ref(null);
-const myValue2 = ref('tes bosku')
+// const myinput = ref(null);
+// const myValue = ref(null);
+// const myValue2 = ref('tes bosku')
 
-function submitData() {
-    myinput.value.focus()
+const formData = ref({
+    name: "",
+    lastName: ""
+});
+
+
+// function submitData() {
+//     myinput.value.focus()
+// }
+
+// function autoFocus() {
+//     const length = myValue.value
+//     if (length.length > 2) {
+//         console.log(length);
+//         myValue2.value = null
+//         myinput.value.focus()
+
+//     }
+// }
+
+
+function save() {
+    // console.log(formData)
 }
 
-function autoFocus() {
-    const length = myValue.value
-    if (length.length > 2) {
-        console.log(length);
-        myValue2.value = null
-        myinput.value.focus()
+const clearForm = () => {
+    // Reset the formData object to its initial state
+    formData.value = {
+        name: "",
+        lastName: ""
+    };
+    return { formData }
+};
 
-    }
+const json_fields = {
+    "Complete name": "name",
+    City: "city",
+    Telephone: "phone.mobile",
+    "Telephone 2": {
+        field: "phone.landline",
+        callback: (value) => {
+            return `Landline Phone - ${value}`;
+        },
+    },
 }
+
+const json_data = [
+    {
+        name: "Tony Peña",
+        city: "New York",
+        country: "United States",
+        birthdate: "1978-03-15",
+        phone: {
+            mobile: "1-541-754-3010",
+            landline: "(541) 754-3010",
+        },
+    },
+    {
+        name: "Thessaloniki",
+        city: "Athens",
+        country: "Greece",
+        birthdate: "1987-11-23",
+        phone: {
+            mobile: "+1 855 275 5071",
+            landline: "(2741) 2621-244",
+        },
+    },
+]
+const json_fields_2 = {
+    "ID": "id",
+    "Name": "name",
+    "Price": "price",
+}
+function startDownload() {
+    alert('show loading');
+}
+function finishDownload() {
+    alert('hide loading');
+}
+const json_meta = [
+    [
+        {
+            key: "charset",
+            value: "utf-8",
+        },
+    ],
+];
 
 </script>
 
@@ -113,7 +194,7 @@ function autoFocus() {
             </div>
         </div>
         <div class="row mb-3">
-            <input type="text" ref="myinput" class="form-control" v-model="myValue2">
+            <input type="text" ref="myinput" autofocus class="form-control mb-3" v-model="myValue2">
             <button @click="submitData">Autofocus</button>
         </div>
 
@@ -130,6 +211,48 @@ function autoFocus() {
                         </tr>
                     </thead>
                 </DataTable>
+            </div>
+        </div>
+
+        <JsonExcel class="btn btn-default" :data="json_data" :fields="json_fields" worksheet="My Worksheet"
+            name="filename.xls">
+            Download Excel (you can customize this with html code!)
+        </JsonExcel>
+
+        <JsonExcel class="btn btn-success" :fetch="fetchData" :fields="json_fields_2" :before-generate="startDownload"
+            :before-finish="finishDownload" worksheet="My Worksheet" name="filename.xls">
+            Download Excel Data From DB
+        </JsonExcel>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Launch demo modal
+        </button>
+
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form key="">
+                            <input type="text" v-model="formData.name" />
+                            <input type="text" v-model="formData.lastName" />
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="clearForm"
+                            data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" @click="save">Save changes</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

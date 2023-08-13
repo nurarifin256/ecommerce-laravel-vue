@@ -83,6 +83,7 @@ const fetchData = async () => {
     const response = await api.get('/api/inventory/barang')
     console.log(response);
     return response.data.data;
+
 }
 
 onMounted(() => {
@@ -167,10 +168,12 @@ const json_fields_2 = {
     "Price": "price",
 }
 function startDownload() {
-    alert('show loading');
+    // alert('show loading');
+    console.log('loading');
 }
 function finishDownload() {
-    alert('hide loading');
+    // alert('hide loading');
+    console.log('sudah');
 }
 const json_meta = [
     [
@@ -223,6 +226,9 @@ const json_meta = [
             :before-finish="finishDownload" worksheet="My Worksheet" name="filename.xls">
             Download Excel Data From DB
         </JsonExcel>
+
+
+        <a href="#/dashboard">About</a>
 
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">

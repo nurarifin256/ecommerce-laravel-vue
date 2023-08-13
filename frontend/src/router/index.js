@@ -38,6 +38,11 @@ const routes = [
     component: () => import("../views/permission/IndexView.vue"),
   },
   {
+    path: "/modal",
+    name: "modal",
+    component: () => import("../views/barang/ModalView.vue"),
+  },
+  {
     path: "/baran",
     name: "baran",
     component: JlDatatable,

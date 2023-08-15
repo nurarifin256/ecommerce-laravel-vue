@@ -16,7 +16,8 @@ const initialState = {
 // }
 
 // cara kedua
-const formData = ref({ ...initialState });;
+const formData = ref({ ...initialState });
+
 
 function reset() {
     // cara ini juga bisa

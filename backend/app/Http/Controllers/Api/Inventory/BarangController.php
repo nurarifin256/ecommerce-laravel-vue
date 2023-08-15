@@ -160,4 +160,72 @@ class BarangController extends Controller
         $query = $query->get();
         return $query->count();
     }
+
+    // $no++;
+    // $row[] = $no;
+    // $list      = $this->sql_list2($req)->get();
+    public function data_list2(Request $req)
+    {
+        $list      = $this->get_list2($req);
+        $data      = array();
+        $no        = $req['start'];
+
+        $data      = array();
+        foreach ($list as $field) {
+
+            $row   = array();
+            $row[] = $field->po_code;
+            $row[] = $field->size_29;
+
+            $row[] = $field->size_30;
+
+            $row[] = $field->size_31;
+
+            $row[] = $field->size_32;
+
+            $data[] = $row;
+        }
+
+
+        $output = array(
+            "draw"            => $req['draw'],
+            "recordsTotal"    => 0,
+            "recordsFiltered" => $this->count_filtered2($req, 'filter'),
+            "data"            => $data,
+        );
+        return response()->json($output);
+    }
+
+    function get_list2(Request $req)
+    {
+        $query = $this->sql_list2($req);
+
+        if ($req['length'] != -1)
+            $query->offset($req['start'])
+                ->limit($req['length']);
+        return $query->get();
+    }
+
+    function sql_list2()
+    {
+        $sql = "(SELECT *
+                    FROM crosstab(
+                    'SELECT po_code, sizes, SUM(qty) AS total_qty
+                        FROM t_scanin
+                        GROUP BY po_code, sizes
+                        ORDER BY 1, 2',
+                    'VALUES  (''29''), (''30''), (''31''), (''32'')'
+                    ) AS ct (po_code text, size_29 int, size_30 int, size_31 int, size_32 int)
+                ) AS A1";
+
+        $sqls = DB::table(DB::raw($sql));
+        return $sqls;
+    }
+
+    function count_filtered2($req, $filter = '')
+    {
+        $query = $this->sql_list2($req, $filter);
+        $query = $query->get();
+        return $query->count();
+    }
 }

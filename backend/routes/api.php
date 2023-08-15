@@ -32,6 +32,7 @@ Route::apiResource('/permissions', PermissionController::class);
 Route::get('/inventory/barang', [BarangController::class, 'getBarangs']);
 Route::get('/inventory/barang/cari/{search}', [BarangController::class, 'cari']);
 Route::post('/inventory/list', [BarangController::class, 'data_list']);
+Route::post('/inventory/list_2', [BarangController::class, 'data_list2']);
 Route::get('/inventory/barang/search', [BarangController::class, 'search']);
 Route::get('/inventory', [BarangController::class, 'index']);
 // Route::get('/sql-server', [BarangController::class, 'getCategories']);

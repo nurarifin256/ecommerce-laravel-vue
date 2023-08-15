@@ -147,6 +147,13 @@ $(function () {
         "language": {
             "infoFiltered": ""
         },
+        "ajax": {
+            "url": "http://192.168.67.76:8000/api/inventory/list",
+            "type": "POST",
+            "data": function (data) {
+                data.search = $('#search').val()
+            }
+        },
         // ajax: {
         //     url: 'http://192.168.215.76:8000/api/inventory/list',
         //     type: 'GET',
@@ -158,13 +165,6 @@ $(function () {
         //     'print',
         //     'copy',
         // ],
-        "ajax": {
-            "url": "http://192.168.67.76:8000/api/inventory/list",
-            "type": "POST",
-            "data": function (data) {
-                data.search = $('#search').val()
-            }
-        },
         // "columns": [
         //     {
         //         data: null, render: function (data, type, row, meta) { return `${meta.row + 1}` }

@@ -43,6 +43,11 @@ const routes = [
     component: () => import("../views/barang/ModalView.vue"),
   },
   {
+    path: "/pivot",
+    name: "pivot",
+    component: () => import("../views/sizes/IndexView.vue"),
+  },
+  {
     path: "/baran",
     name: "baran",
     component: JlDatatable,

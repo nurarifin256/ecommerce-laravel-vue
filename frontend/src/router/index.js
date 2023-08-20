@@ -28,6 +28,21 @@ const routes = [
     component: () => import("../views/barang/BarangTableView.vue"),
   },
   {
+    path: "/barang/masuk",
+    name: "barang-masuk",
+    component: () => import("../views/barang/BarangMasukView.vue"),
+  },
+  {
+    path: "/barang/keluar",
+    name: "barang-keluar",
+    component: () => import("../views/barang/BarangKeluarView.vue"),
+  },
+  {
+    path: "/user",
+    name: "user",
+    component: () => import("../views/auth/UserView.vue"),
+  },
+  {
     path: "/table-barang",
     name: "table-barang",
     component: () => import("../views/barang/TableBarangView.vue"),

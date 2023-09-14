@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductImportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/products', [ProductImportController::class, 'index'])->name('products.import.index');
+Route::post('/store', [ProductImportController::class, 'store'])->name('products.import.store');

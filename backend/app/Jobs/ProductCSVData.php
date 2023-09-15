@@ -36,13 +36,14 @@ class ProductCSVData implements ShouldQueue
      */
     public function handle()
     {
+        $productData = [];
         foreach ($this->data as $product) {
-            // $productInput = array_combine($this->header, $product);
-            Product::create([
-                'name'     => 'sabun',
-                'kategori' => 'a'
-            ]);
-            // Product::create($productInput);
+            $productParts = explode(";", $product[0]);
+            $productData[] = [
+                'name' => $productParts[0],
+                'kategori' => $productParts[1]
+            ];
         }
+        Product::insert($productData);
     }
 }

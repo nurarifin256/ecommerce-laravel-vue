@@ -18,7 +18,7 @@ class ProductImportController extends Controller
         if ($request->has('csv')) {
             $csv = file($request->csv);
 
-            $chunks = array_chunk($csv, 10);
+            $chunks = array_chunk($csv, 500);
 
             $header = [];
 

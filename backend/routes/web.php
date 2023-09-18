@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ProductImportController;
 use App\Jobs\SendEmailJob;
@@ -41,3 +42,4 @@ Route::get('send-email-v2', function () {
 });
 
 Route::get('send-email-pdf', [PdfController::class, 'index']);
+Route::get('send-email-excel', [ExcelController::class, 'index']);

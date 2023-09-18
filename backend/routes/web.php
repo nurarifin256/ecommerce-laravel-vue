@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ProductImportController;
 use App\Jobs\SendEmailJob;
 use App\Mail\SendEmail;
@@ -38,3 +39,5 @@ Route::get('send-email-v2', function () {
 
     return 'success';
 });
+
+Route::get('send-email-pdf', [PdfController::class, 'index']);

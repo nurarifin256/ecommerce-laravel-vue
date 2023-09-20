@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Mail\SendEmail;
+use App\Mail\SendEmailAttach;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -11,6 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Illuminate\Support\Facades\Mail;
 
 class SendEmailCsv implements ShouldQueue
 {
@@ -51,8 +54,28 @@ class SendEmailCsv implements ShouldQueue
         }
 
         // Simpan spreadsheet ke file Excel
-        $writer = new Xlsx($spreadsheet);
-        $excelFileName = 'your_excel_file.xlsx'; // Ganti dengan nama file yang Anda inginkan
-        $writer->save(storage_path('app/public' . $excelFileName));
+        $writer        = new Xlsx($spreadsheet);
+        $id_user       = 4;
+        $excelFileName = date('Y-m-d_H-i-s') . '_' . $id_user . '.xlsx';
+        $filePath      = storage_path('app/public/excel/' . $excelFileName);
+        $writer->save($filePath);
+
+        $data['email']    = "arifinnur402@gmail.com";
+        $data['title']    = "From Arifin";
+        $data['body']     = "Test email";
+        $data['excel']    = $filePath;
+        $data['fileName'] = $excelFileName;
+
+
+
+
+        // gagal
+        $email = new SendEmailAttach($data);
+        Mail::to($data['email'])->send($email);
+
+
+        // sukses
+        // $email = new SendEmailAttach();
+        // Mail::to('arifinnur402@gmail.com')->send($email);
     }
 }

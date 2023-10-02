@@ -63,6 +63,11 @@ const routes = [
     component: () => import("../views/sizes/IndexView.vue"),
   },
   {
+    path: "/print",
+    name: "print",
+    component: () => import("../views/print/IndexView.vue"),
+  },
+  {
     path: "/baran",
     name: "baran",
     component: JlDatatable,

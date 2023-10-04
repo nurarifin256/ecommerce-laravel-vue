@@ -3,14 +3,17 @@
 import { onMounted, ref } from 'vue';
 import QrcodeVue from 'qrcode.vue' //pake yang ini
 import jsPDF from 'jspdf';
+import html2pdf from 'html2pdf.js';
 import api from '../../api';
 const barangs = ref([])
+// const barangs2 = ref([])
 
 // const value = 'https://example.com'
 // const size = 300
 
 const getBarang = async () => {
     const response = await api.get("/api/inventory/barang")
+    console.log(response);
     barangs.value = response.data.data
 };
 
@@ -105,19 +108,121 @@ onMounted(() => {
 
 const printPreview = () => {
     const doc = new jsPDF();
+    doc.setFontSize(20);
     var elementHTML = document.querySelector("#table");
+
+    // doc.html(elementHTML, {
+    //     callback: function (doc) {
+    //         // Save the PDF
+    //         // doc.save('sample-document.pdf');
+    //         doc.output('dataurlnewwindow');
+    //         // doc.output("stream");
+    //     },
+    //     x: 15,
+    //     y: 15,
+    //     width: 170, //target width in the PDF document
+    //     windowWidth: 650 //window width in CSS pixels
+    // });
 
     doc.html(elementHTML, {
         callback: function (doc) {
-            // Save the PDF
-            // doc.save('sample-document.pdf');
-            doc.output('dataurlnewwindow');
+            doc.save();
         },
-        x: 15,
-        y: 15,
-        width: 170, //target width in the PDF document
-        windowWidth: 650 //window width in CSS pixels
+        x: 10,
+        y: 10,
+        width: 170,
+        windowWidth: 650
     });
+
+};
+
+const printPreview2 = async () => {
+    const element = document.getElementById('table');
+
+    // Konfigurasi HTML2PDF
+    const pdfOptions = {
+        margin: 10,
+        filename: 'print-preview.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    };
+
+    html2pdf(element).set(pdfOptions).output();
+    // html2pdf().from(element).set(pdfOptions).outputPdf();
+
+    // const blob = new Blob([pdfBlob], { type: 'application/pdf' });
+    // const url = window.URL.createObjectURL(blob);
+    // window.open(url, '_blank');
+
+
+    // html2pdf(element).toPdf();
+    // var opt = {
+    //     margin: 1,
+    //     filename: 'myfile.pdf',
+    //     html2canvas: { scale: 2 },
+    //     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    // };
+
+    // New Promise-based usage:
+    // html2pdf().set(opt).from(element).save();
+    // html2pdf().set(opt).from(element).output();
+
+    // window.open('_blank');
+
+    // const response = await api.get("/api/inventory/barang");
+    // const barangs2 = response.data.data;
+
+    // console.log(barangs2);
+
+    // Render tampilan "print preview" sebagai PDF
+    //     const printPreviewHTML = `
+    //     <table>
+    //       <thead>
+    //         <tr>
+    //           <th>ID</th>
+    //           <th>Name</th>
+    //           <th>Price</th>
+    //         </tr>
+    //       </thead>
+    //       <tbody>
+    //         </tbody>
+    //         ${barangs2.map((barang, index) => `
+    //             <tr>
+    //                 <td>${barang.id}</td>
+    //                 <td>${barang.name}</td>
+    //                 <td>${barang.price}</td>
+    //             </tr>
+    //         `).join('')}
+    //     </table>
+    //   `;
+
+    //     // Konfigurasi HTML2PDF
+    //     const pdfOptions = {
+    //         margin: 10,
+    //         filename: 'print-preview.pdf',
+    //         image: { type: 'jpeg', quality: 0.98 },
+    //         html2canvas: { scale: 2 },
+    //         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    //     };
+
+    //     const pdf = await html2pdf().from(printPreviewHTML).set(pdfOptions).outputPdf();
+
+    //     // Buka tampilan "preview" dalam jendela baru
+    //     const blob = new Blob([pdf], { type: 'application/pdf' });
+    //     const url = window.URL.createObjectURL(blob);
+    //     window.open(url, '_blank');
+
+
+    // const pdf = await html2pdf().from(printPreviewHTML).set(pdfOptions).outputPdf();
+
+    // // Unduh PDF
+    // const blob = new Blob([pdf], { type: 'application/pdf' });
+    // const url = window.URL.createObjectURL(blob);
+    // const a = document.createElement('a');
+    // a.href = url;
+    // a.download = 'print-preview.pdf';
+    // a.click();
 };
 
 </script>
@@ -130,9 +235,10 @@ const printPreview = () => {
 
         <!-- <button type="button" class="btn btn-primary" @click="print">Print</button> -->
         <button type="button" class="btn btn-primary" @click="printPreview">Print</button>
+        <button type="button" class="btn btn-primary" @click="printPreview2">Print 2</button>
 
-        <div class="my-3">
-            <table class="table table-bordered" id="table">
+        <div class="my-3" id="table">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>ID</th>

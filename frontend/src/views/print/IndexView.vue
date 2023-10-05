@@ -1,11 +1,15 @@
 <script setup>
 // import QRious from 'qrious';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import QrcodeVue from 'qrcode.vue' //pake yang ini
 import jsPDF from 'jspdf';
 import html2pdf from 'html2pdf.js';
 import api from '../../api';
+const router = useRouter
 const barangs = ref([])
+const checkedBarangs = ref([])
+const selectAll = ref(false);
 // const barangs2 = ref([])
 
 // const value = 'https://example.com'
@@ -225,7 +229,22 @@ const printPreview2 = async () => {
     // a.click();
 };
 
+const toggleSelectAll = () => {
+    if (selectAll.value) {
+        // Jika selectAll adalah true, tambahkan semua nama barang ke dalam checkedBarangs
+        checkedBarangs.value = barangs.value.map(b => b.name);
+    } else {
+        // Jika selectAll adalah false, kosongkan checkedBarangs
+        checkedBarangs.value = [];
+    }
+};
+
+const print3 = () => {
+    console.log(checkedBarangs.value);
+    router.push('print/show/')
+};
 </script>
+
 
 <template>
     <div class="container">
@@ -235,9 +254,9 @@ const printPreview2 = async () => {
 
         <!-- <button type="button" class="btn btn-primary" @click="print">Print</button> -->
         <button type="button" class="btn btn-primary" @click="printPreview">Print</button>
-        <button type="button" class="btn btn-primary" @click="printPreview2">Print 2</button>
+        <button type="button" target="_blank" class="btn btn-primary" @click="printPreview2">Print 2</button>
 
-        <div class="my-3" id="table">
+        <div class="my-3" id="table" style="display: none;">
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -249,6 +268,36 @@ const printPreview2 = async () => {
                 </thead>
                 <tbody>
                     <tr v-for="(b, index) in barangs" :key="index">
+                        <td>{{ b.id }}</td>
+                        <td>{{ b.name }}</td>
+                        <td>{{ b.price }}</td>
+                        <td><qrcode-vue :value="b.name" :size="50" level="H" /></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="my-3">Checked names: {{ checkedBarangs }}</div>
+
+
+        <a href="#" @click="print3()" class="btn btn-primary">print</a>
+
+        <div class="my-3">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th><input id="selected-all" type="checkbox" v-model="selectAll" @change="toggleSelectAll"></th>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>QR Code</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(b, index) in barangs" :key="index">
+                        <td><input :checked="selectAll" type="checkbox" :id="b.name" :value="b.name"
+                                v-model="checkedBarangs">
+                        </td>
                         <td>{{ b.id }}</td>
                         <td>{{ b.name }}</td>
                         <td>{{ b.price }}</td>

@@ -3,12 +3,20 @@
 namespace App\Http\Controllers\Api\Inventory;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AuthResource;
 use App\Models\Barangs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class BarangController extends Controller
 {
+    public function print(Request $request)
+    {
+        $requestData = $request->input('bar');
+        $idArray = json_decode($requestData, true);
+        $data = Barangs::whereIn('id', $idArray)->get();
+        return response()->json(['data' => $data]);
+    }
     public function index()
     {
         $posts = Barangs::latest()->paginate(10);

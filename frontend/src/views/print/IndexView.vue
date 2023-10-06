@@ -6,10 +6,12 @@ import QrcodeVue from 'qrcode.vue' //pake yang ini
 import jsPDF from 'jspdf';
 import html2pdf from 'html2pdf.js';
 import api from '../../api';
-const router = useRouter
 const barangs = ref([])
 const checkedBarangs = ref([])
 const selectAll = ref(false);
+
+const router = useRouter();
+
 // const barangs2 = ref([])
 
 // const value = 'https://example.com'
@@ -240,8 +242,7 @@ const toggleSelectAll = () => {
 };
 
 const print3 = () => {
-    console.log(checkedBarangs.value);
-    router.push('print/show/')
+    router.push({ name: 'printshow', params: { bar: JSON.stringify(checkedBarangs.value) } })
 };
 </script>
 
@@ -295,8 +296,7 @@ const print3 = () => {
                 </thead>
                 <tbody>
                     <tr v-for="(b, index) in barangs" :key="index">
-                        <td><input :checked="selectAll" type="checkbox" :id="b.name" :value="b.name"
-                                v-model="checkedBarangs">
+                        <td><input :checked="selectAll" type="checkbox" :id="b.id" :value="b.id" v-model="checkedBarangs">
                         </td>
                         <td>{{ b.id }}</td>
                         <td>{{ b.name }}</td>

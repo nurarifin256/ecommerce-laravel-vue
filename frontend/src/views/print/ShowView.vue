@@ -9,27 +9,64 @@ const router = useRouter()
 const val = ref([])
 const qrcode = ref(route.params.bar);
 
+// router.push('/').catch(() => { })
 const getBarang = async () => {
     const response = await api.post('/api/get-barang/print', { bar: qrcode.value })
-    console.log(response.data);
     val.value = response.data.data
-    window.print()
-    // router.push('/').catch(() => { })
+    // window.print()
 };
+
+const print = () => {
+    getBarang();
+    const printContainer = document.getElementById('print-container');
+    printContainer.style.display = 'block';
+    window.print();
+    printContainer.style.display = 'none';
+};
+
+// const print = () => {
+//     getBarang();
+//     const printContainer = document.getElementById('print-container');
+//     printContainer.style.display = 'block';
+
+//     const printWindow = window.open('', '_blank');
+//     printWindow.document.open();
+//     printWindow.document.write('<html><head><title>Cetak</title></head><body>');
+//     printWindow.document.write(printContainer.innerHTML);
+//     printWindow.document.write('</body></html>');
+//     printWindow.document.close();
+//     printWindow.print();
+//     printWindow.close();
+
+//     printContainer.style.display = 'none';
+// };
 
 onMounted(() => {
     getBarang()
+    setTimeout(() => {
+        print();
+    }, 5000);
 });
 </script>
 
+<!-- <p>this is show page</p>
+<p>{{ qrcode }}</p> -->
 <template>
-    <!-- <p>this is show page</p>
-    <p>{{ qrcode }}</p> -->
-    <div class="mt-3">
+    <!-- <div class="mt-3">
         <ul>
             <li v-for="(item, index) in val" :key="index">
                 <qrcode-vue :value="item.name" :size="50" level="H" />
             </li>
         </ul>
+    </div> -->
+
+    <div>
+        <div id="print-container" style="display: none;">
+            <ul>
+                <li v-for="(item, index) in val" :key="index">
+                    <qrcode-vue :value="item.name" :size="50" level="H" />
+                </li>
+            </ul>
+        </div>
     </div>
 </template>

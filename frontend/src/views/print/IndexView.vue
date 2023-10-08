@@ -254,7 +254,7 @@ const print3 = () => {
         </div> -->
 
         <!-- <button type="button" class="btn btn-primary" @click="print">Print</button> -->
-        <button type="button" class="btn btn-primary" @click="printPreview">Print</button>
+        <!-- <button type="button" class="btn btn-primary" @click="printPreview">Print</button> jangan di pake -->
         <button type="button" target="_blank" class="btn btn-primary" @click="printPreview2">Print 2</button>
 
         <div class="my-3" id="table" style="display: none;">

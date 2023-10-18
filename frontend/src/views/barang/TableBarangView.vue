@@ -74,19 +74,23 @@ function tesData() {
 // })
 
 const fetchOptions = async (search, loading) => {
-    if (search.length > 2) {
+    if (search.length > 0) {
         loading(true)
         try {
             const response = await api.get(`/api/inventory/barang/cari/${search}`)
             options.value = response.data;
-            console.log(response.data);
+            console.log(response);
             loading(false);
         } catch (error) {
             console.error('Terjadi kesalahan saat mengambil data:', error);
             loading(false);
         }
     }
-
+    // cara 2
+    // else {
+    //     // Reset options to an empty array when there is no search input
+    //     options.value = [];
+    // }
 }
 
 const saveData = async () => {
@@ -133,54 +137,54 @@ const saveData = async () => {
 
 
 
-$(function () {
+// $(function () {
 
-    let table;
-    table = $('#data-table').DataTable({
-        'processing': true,
-        'serverSide': true,
-        'responsive': true,
-        'ordering': false,
-        'orderable': false,
-        'lengthChange': true,
-        'sDom': 'lrtip',
-        "language": {
-            "infoFiltered": ""
-        },
-        "ajax": {
-            "url": "http://192.168.67.76:8000/api/inventory/list",
-            "type": "POST",
-            "data": function (data) {
-                data.search = $('#search').val()
-            }
-        },
-        // ajax: {
-        //     url: 'http://192.168.215.76:8000/api/inventory/list',
-        //     type: 'GET',
-        // },
-        // dom: 'Bfrtip',
-        // buttons: [
-        //     'excelHtml5',
-        //     'pdfHtml5',
-        //     'print',
-        //     'copy',
-        // ],
-        // "columns": [
-        //     {
-        //         data: null, render: function (data, type, row, meta) { return `${meta.row + 1}` }
-        //     },
-        //     { data: 'name' },
-        //     { data: 'price' },
-        // ]
-    })
-    $('#btn-cari').click(function () {
-        table.ajax.reload();
-    });
-    $('#btn-reset').click(function () {
-        $('#search').val("");
-        table.ajax.reload();
-    });
-});
+//     let table;
+//     table = $('#data-table').DataTable({
+//         'processing': true,
+//         'serverSide': true,
+//         'responsive': true,
+//         'ordering': false,
+//         'orderable': false,
+//         'lengthChange': true,
+//         'sDom': 'lrtip',
+//         "language": {
+//             "infoFiltered": ""
+//         },
+//         "ajax": {
+//             "url": "http://192.168.67.76:8000/api/inventory/list",
+//             "type": "POST",
+//             "data": function (data) {
+//                 data.search = $('#search').val()
+//             }
+//         },
+// ajax: {
+//     url: 'http://192.168.215.76:8000/api/inventory/list',
+//     type: 'GET',
+// },
+// dom: 'Bfrtip',
+// buttons: [
+//     'excelHtml5',
+//     'pdfHtml5',
+//     'print',
+//     'copy',
+// ],
+// "columns": [
+//     {
+//         data: null, render: function (data, type, row, meta) { return `${meta.row + 1}` }
+//     },
+//     { data: 'name' },
+//     { data: 'price' },
+// ]
+//     })
+//     $('#btn-cari').click(function () {
+//         table.ajax.reload();
+//     });
+//     $('#btn-reset').click(function () {
+//         $('#search').val("");
+//         table.ajax.reload();
+//     });
+// });
 
 const placeholderText = 'Pilih salah satu opsi...';
 
@@ -190,23 +194,33 @@ const { data } = useQuery({
     queryKey: ['barangs'],
     queryFn: getBarangs,
 });
+
+function resetOption(param) {
+    console.log(param);
+
+    // cara pertama reset value vue select
+    // options.value = []
+
+    // tidak jalan, cari cara lain
+    param.value = []
+}
 </script>
 
 <template>
-    <div v-if="data">
-        <ul>
+    <!-- <div v-if="data">
+        <ul> -->
 
-            <!-- syntax ini yang tampil hanya lenght nya saja -->
-            <li v-for="b in data" :key="b.id">{{ b.name }}</li>
+    <!-- syntax ini yang tampil hanya lenght nya saja -->
+    <!-- <li v-for="b in data" :key="b.id">{{ b.name }}</li> -->
 
-            <!-- syntax ini data tidak tampil -->
-            <li v-for="b in data.data" :key="b.id">{{ b.name }}</li>
+    <!-- syntax ini data tidak tampil -->
+    <!-- <li v-for="b in data.data" :key="b.id">{{ b.name }}</li> -->
 
-            <!-- syntax ini tampil, tapi semua field -->
-            {{ data }} <br>
-        </ul>
+    <!-- syntax ini tampil, tapi semua field -->
+    <!-- {{ data }} <br> -->
+    <!-- </ul>
     </div>
-</template>
+</template> -->
 
 
 
@@ -218,7 +232,7 @@ const { data } = useQuery({
 
 
 
-    <!-- <div class="container mt-5">
+    <div class="container mt-5">
         <div class="row">
             <div class="col-md-6">
             </div>
@@ -234,10 +248,15 @@ const { data } = useQuery({
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 <form>
+                    <!-- cara pertama reset value -->
+                    <!-- :options="options" :reduce="option => option.name" label="name" @search="fetchOptions" @click="resetOption" -->
                     <div class="form-group">
                         <label class="text-info">Barang Ajax</label>
+
+                        <!-- cara dua pake onchange -->
                         <vSelect v-model="selectedOption" :filterable="false" :placeholder="placeholderText"
-                            :options="options" :reduce="option => option.id" label="name" @search="fetchOptions">
+                            :options="options" :reduce="option => option.name" label="name" @search="fetchOptions"
+                            @clear="resetOption" @change="resetOption('options')">
                         </vSelect>
                     </div>
                     <button type="button" @click="saveData">Save</button>
@@ -306,5 +325,5 @@ const { data } = useQuery({
             <input type="email" class="form-control" id="exampleInputEmail1" v-model="email">
             <input type="text" class="form-control" id="exampleInputPassword1" v-model="password">
         </div>
-    </div> -->
-<!-- </template> -->
+    </div>
+</template>
